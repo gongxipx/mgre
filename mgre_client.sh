@@ -9,7 +9,7 @@ function link_tun(){
 ip tunnel add tun_suses mode gre local ${localAddr} remote $remoteIp key ${tunKey} ttl 255
 ip addr add ${lanIp}/30 dev tun_suses
 ip link set tun_suses up
-sysctl -w net.ipv4.conf.all.rp_filter=2
+sysctl -w net.ipv4.conf.all.rp_filter=2 >> /dev/null 2>&1
 ip route add 1.2.4.8/32 dev tun_suses
 curl https://raw.githubusercontent.com/gongxipx/mgre/main/add_cn_route.sh | bash >> /dev/null 2>&1" > link_tun.sh
 	bash link_tun.sh
