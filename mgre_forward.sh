@@ -93,7 +93,8 @@ function rm_iptables_rules(){
 function uninstall_tun(){
 	cd /home/mgre
 	ip link del tun_suses
-	rm -rf install_tun.sh added_server.sh
+	rm -rf install_tun.sh added_server.sh autostart.sh
+	rm -rf /etc/systemd/system/gre_forward.service
 }
 
 echo "######################################################"
