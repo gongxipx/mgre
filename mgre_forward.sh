@@ -34,22 +34,24 @@ ip link set tun_suses up" > install_tun.sh
 	touch added_server.sh
 	#设置开机自启动
 	echo "#/bin/bash
-bash /home/install_tun.sh
-bash /home/added_server.sh" > /home/autostart.sh
+bash /home/mgre/install_tun.sh
+bash /home/mgre/added_server.sh" > autostart.sh
 	echo "
 [Unit]
 Description=GRE
+After=network.target gre.service
+
 
 [Service]
 User=root
 Group=root
 RestartSec=20s
 Restart=always
-ExecStart=/bin/bash /home/autostart.sh
+ExecStart=/bin/bash /home/mgre/autostart.sh
 
 [Install]
-WantedBy=default.target" >> /etc/systemd/system/gre.service
-	systemctl enable gre.service
+WantedBy=default.target" > /etc/systemd/system/gre_forward.service
+	systemctl enable gre_forward.service
 	echo "GRE隧道安装完成！"
 }
 
