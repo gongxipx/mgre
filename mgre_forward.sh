@@ -24,7 +24,7 @@ function install_tun(){
 	read -p "请选择9929 GRE供应商（tun_olik或oulucloud）：" provider
 
 	echo "sysctl -w net.ipv4.ip_forward=1 >> /dev/null 2>&1
-ip link del tun_suses  
+ip link del tun_suses  >> /dev/null 2>&1
 ip tunnel add tun_suses mode gre local ${localAddr} key ${tunKey} ttl 255
 ip addr add 10.0.1.1/32 dev tun_suses
 ip link set tun_suses up" > install_tun.sh
