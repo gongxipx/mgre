@@ -1,6 +1,8 @@
 #/bin/bash
 function link_tun(){
 	#获取本机IP地址
+	mkdir -p /home/mgre/
+	cd /home/mgre/
 	localAddr=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
 	read -p "请输入GRE隧道服务端IP：" remoteIp
 	read -p "请输入GRE隧道内网IP：" lanIp
@@ -12,12 +14,29 @@ ip link set tun_suses up
 sysctl -w net.ipv4.conf.all.rp_filter=2 >> /dev/null 2>&1
 ip route add 1.2.4.8/32 dev tun_suses
 curl https://raw.githubusercontent.com/gongxipx/mgre/main/add_cn_route.sh | bash >> /dev/null 2>&1" > link_tun.sh
-	bash link_tun.sh
+	echo "[Unit]
+Description=GRE
+After=network.target
+
+[Service]
+User=root
+Group=root
+RestartSec=20s
+Restart=always
+ExecStart=/bin/bash /home/mgre/link_tun.sh
+
+[Install]
+WantedBy=default.target" > /etc/systemd/system/gre_client.service
+	systemctl start gre_client.service
+	systemctl enable gre_client.service
 	echo "tun_suses is up and china routes added"
 }
 
 function uninstall_tun(){
 	ip link del tun_suses
+	cd /home/mgre/
+	rm -rf link_tun.sh
+	rm -rf /etc/systemd/system/gre_client.service
 }
 
 
