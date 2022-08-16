@@ -1,7 +1,7 @@
 #/bin/bash
 function link_tun(){
 	#获取本机IP地址
-	mkdir -p /home/mgre/
+	mkdir -p /home/mgre
 	cd /home/mgre/
 	localAddr=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
 	read -p "请输入GRE隧道服务端IP：" remoteIp
@@ -37,6 +37,7 @@ function uninstall_tun(){
 	cd /home/mgre/
 	rm -rf link_tun.sh
 	rm -rf /etc/systemd/system/gre_client.service
+	echo "卸载GRE隧道成功！"
 }
 
 
